@@ -26,12 +26,30 @@ class Board
         end
     end
 
-    def p_bomb(row,col)
-        @grid[row][col].plant_bomb
+    def print_board
+        @grid.map do |row|
+            row.map do |tile|
+                tile.render
+            end.join("")
+        end.join("\n")
     end
+
+    def explore(row,col)
+        @grid[row][col].explore
+    end
+
 
 end
 
 a = Board.new
 a.mine
-p a
+puts a.print_board
+
+# Todo
+# render indiviaul tiles depending on status - done
+# print board based on the rendered tiles - done
+# calculate whether tiles have a bomb
+
+# Input
+# Explore tile
+# Flag bomb
