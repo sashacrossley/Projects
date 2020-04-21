@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Recipe</title>
+</head>
+<body>
+    <header>
+        <img src="https://assets.aaonline.io/fullstack/html-css/micro-projects/appacademylogo.png" alt="app-academy-logo" />
+        <nav>
+            <ul>
+                <li><a href="#description">Description</a></li>
+                <li><a href="#ingredients">Ingredients</a></li>
+                <li><a href="#directions">Directions</a></li>
+            </ul>
+        </nav>
+    </header>
+    <aside>
+            <h2 id="ingredients">Ingredients</h2>
+            <ul>
+                <li>1 tbsp olive oil</li>
+                <li>Ing2</li>
+                <li>Ing3</li>
+                <li>Ing1</li>
+                <li>Ing2</li>
+                <li>Ing3</li>
+                <li>Ing1</li>
+                <li>Ing2</li>
+                <li>Ing3</li>
+                <li>Ing1</li>
+                <li>Ing2</li>
+                <li>Ing3</li>
+                <li>Ing1</li>
+                <li>Ing2</li>
+                <li>Ing3</li>
+                <li>Ing1</li>
+                <li>Ing2</li>
+                <li>Ing3</li>
+            </ul>
+    </aside>
+    <h1>Recipe</h1>
+    <section>
+        <h2 id="description">Description</h2>
+        <p>This is my recipe</p>
+        <figure>
+            <img src="http://toriavey.com/images/2010/07/Shakshuka-Close-640x480.jpg" alt="spag" />
+            <figcaption><a href="https://en.wikipedia.org/wiki/Spaghetti">Spaghetti</a></figcaption>
+        </figure>
+        
+    </section>
+    <h2 id="directions">Directions</h2>
+    <ol>
+        <li>Boil Water</li>
+        <li>Put in water</li>
+        <li>Eat</li>
+    </ol>
+    <section>
+        <form>
+            <!-- Name -->
+            <label for="reviewer">Name</label>
+                <input type="text" name="reviewer" id ="reviewer">
+            <!-- Rating -->
+            <label>Rating</label>
+                <input type="radio" id="rating1" name="rating" value="1" checked>
+                <label for="rating1">1</label>
+                <input type="radio" id="rating2" name="rating" value="2">
+                <label for="rating2">2</label>
+                <input type="radio" id="rating3" name="rating" value="3">
+                <label for="rating3">3</label>
+                <input type="radio" id="rating4" name="rating" value="4">
+                <label for="rating4">4</label>
+                <input type="radio" id="rating5" name="rating" value="5">
+                <label for="rating5">5</label>
+            <!-- Cooking Expertise -->
+            <label for="cooking-expertise">Cooking Expertise</label>
+            <select name="cooking-expertise" id="cooking-expertise">
+                <option value="select">Select Cooking Expertise</option selected disabled>
+                <option value="sometimes">Sometimes Cook</option>
+                <option value="everyday">Cook Everyday</option>
+                <option value="hobby">Cooking is a Hobby</option>
+                <option value="pro">Professional Chef</option>
+            </select>
+            <!-- Review -->
+            <label>Review
+                <textarea name="review" cols="30" rows="10"></textarea>
+            </label>
+        </form>
+    </section>
+    <p>Me!!!</p>
+    <footer>
+        <p>Recipe stolen from Wikipedia</p>
+    </footer>
+</body>
+</html>
