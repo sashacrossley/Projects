@@ -18,8 +18,8 @@ class KnightPathFinder
 
     def initialize(starting_pos)
         @starting_pos = starting_pos
-        # build_move_tree
         @considered_positions = [starting_pos] #keep track of the positions you have considered
+        build_move_tree
     end
 
     def self.valid_moves(pos) #find new positions you can move to from a given position.
@@ -52,8 +52,19 @@ class KnightPathFinder
         end
     end
 
-    def find_path
+    def find_path(end_pos)
+        end_node = root_node.dfs(end_pos)
+        trace_path_back(end_node).reverse
+    end
 
+    def trace_path_back(end_node)
+        path_array = []
+        current_node = end_node
+        until current_node.nil?
+            path_array << current_node.value
+            current_node = current_node.parent
+        end
+        path_array
     end
 
     def new_move_positions(pos) #call the ::valid_moves class method, but filter out any positions that are already in @considered_positions. It should then add the remaining new positions to @considered_positions and return these new positions.
@@ -70,6 +81,5 @@ class KnightPathFinder
 end
 
 a = KnightPathFinder.new([0,0])
-# p KnightPathFinder.valid_moves([2,1])
-# p a.new_move_positions([2,1])
-p a.build_move_tree
+p a.find_path([7,6])
+p a.find_path([6,2])
