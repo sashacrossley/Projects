@@ -5,19 +5,19 @@ class Board
     attr_accessor :rows
 
     def initialize
-        
+        create_board
     end
 
     def create_board
         valid_rows = [0,1,6,7]
         @rows = Array.new(8){Array.new(8)}
-        @rows.each_with_index do |row, row_idx|
-            if valid_rows.include?(row_idx)
-                row.each_with_index do |square, square_idx|
-                    row[square_idx] = Piece.new
-                end
-            end
-        end
+        # @rows.each_with_index do |row, row_idx|
+        #     if valid_rows.include?(row_idx)
+        #         row.each_with_index do |square, square_idx|
+        #             row[square_idx] = Piece.new
+        #         end
+        #     end
+        # end
     end
     
     def [](pos)
@@ -45,7 +45,7 @@ class Board
     end
 
     def add_piece(piece, pos)
-
+        self[pos] = piece
     end
 
     def checkmate?(color)
