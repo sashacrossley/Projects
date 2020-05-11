@@ -11,13 +11,57 @@ class Board
     def create_board
         valid_rows = [0,1,6,7]
         @rows = Array.new(8){Array.new(8)}
-        # @rows.each_with_index do |row, row_idx|
-        #     if valid_rows.include?(row_idx)
-        #         row.each_with_index do |square, square_idx|
-        #             row[square_idx] = Piece.new
-        #         end
-        #     end
-        # end
+        @rows.each_with_index do |row, row_idx|
+            #Non-Null Rows
+            if valid_rows.include?(row_idx)
+                #Back row - White
+                if row_idx == 0 
+                    row.each_with_index do |square, square_idx|
+                        if square_idx == 0 || square_idx == 7
+                            row[square_idx] = Rook.new(:white, self, [row_idx,square_idx])
+                        elsif square_idx == 1 || square_idx == 6
+                            row[square_idx] = Knight.new(:white, self, [row_idx,square_idx])
+                        elsif square_idx == 2 || square_idx == 5
+                            row[square_idx] = Bishop.new(:white, self, [row_idx,square_idx])   
+                        elsif square_idx == 3
+                            row[square_idx] = Queen.new(:white, self, [row_idx,square_idx])
+                        elsif square_idx == 4
+                            row[square_idx] = King.new(:white, self, [row_idx,square_idx])
+                        end
+                    end
+                elsif row_idx == 1
+                    row.each_with_index {|square, square_idx| row[square_idx] = Pawn.new(:white, self, [row_idx,square_idx])}
+                #Black
+                elsif row_idx == 6
+                    row.each_with_index {|square, square_idx| row[square_idx] = Pawn.new(:black, self, [row_idx,square_idx])}
+                elsif row_idx == 7
+                   row.each_with_index do |square, square_idx|
+                        if square_idx == 0 || square_idx == 7
+                            row[square_idx] = Rook.new(:black, self, [row_idx,square_idx])
+                        elsif square_idx == 1 || square_idx == 6
+                            row[square_idx] = Knight.new(:black, self, [row_idx,square_idx])
+                        elsif square_idx == 2 || square_idx == 5
+                            row[square_idx] = Bishop.new(:black, self, [row_idx,square_idx])   
+                        elsif square_idx == 3
+                            row[square_idx] = Queen.new(:black, self, [row_idx,square_idx])
+                        elsif square_idx == 4
+                            row[square_idx] = King.new(:black, self, [row_idx,square_idx])
+                        end
+                    end                    
+                end
+            else
+                row.each_with_index {|square, square_idx| row[square_idx] = NullPiece.instance}
+
+            end
+        end
+    end
+
+    def back_row(colour)
+
+    end
+
+    def pawns_row(colour)
+
     end
     
     def [](pos)

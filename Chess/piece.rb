@@ -1,6 +1,6 @@
 require 'singleton'
 require_relative './board.rb'
-
+##remmber to replace nil refernces with colour once you've implemented whole board
 module Stepable
 
     def moves
@@ -8,7 +8,7 @@ module Stepable
         move_diffs.each do |dx, dy|
             x, y = pos
             pos = [x + dx, y + dy]
-            if board.valid_pos?(pos) && board[pos].nil? #board[pos].colour != colour
+            if board.valid_pos?(pos) && board[pos].colour != colour #board[pos].nil?
                 moves << pos
             end
         end
@@ -69,7 +69,7 @@ module Slideable
         x = x + dx
         y = y + dy
         pos = [x, y]
-        while board.valid_pos?(pos) && board[pos].nil? #board[pos].colour != colour
+        while board.valid_pos?(pos) && board[pos].colour != colour #board[pos].nil? 
             moves << pos
             x = x + dx
             y = y + dy
@@ -253,12 +253,12 @@ class Pawn < Piece
         x, y = pos
         moves = []
         pos = [x + forward_dir, y]
-        if board.valid_pos?(pos) && board[pos].nil? #board.empty?(pos)
+        if board.valid_pos?(pos) && board[pos].empty? 
             moves << pos
         end
 
         pos = [(x + (2*forward_dir)), y]
-        if at_start_row? && board[pos].nil? #board.empty?(pos)
+        if at_start_row? && board[pos].empty? 
             moves << pos
         end
         moves
@@ -269,7 +269,7 @@ class Pawn < Piece
         possible_moves = [[x + forward_dir, y + 1], [x + forward_dir, y - 1]]
         moves = []
         possible_moves.each do |move|
-            if board.valid_pos?(move) && !board[move].nil? #!board.empty?(pos) && board[move].colour != colour
+            if board.valid_pos?(move) && !board[move].empty? && board[move].colour != colour #!board[move].nil? 
                  moves << move
             else 
                 next
