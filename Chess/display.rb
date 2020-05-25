@@ -35,5 +35,5 @@ class Display
 
 end
 
-a = Display.new(Board.new)
-a.test
+# a = Display.new(Board.new)
+# a.test

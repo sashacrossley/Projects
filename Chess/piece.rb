@@ -1,5 +1,5 @@
 require 'singleton'
-require_relative './board.rb'
+#require_relative './board.rb'
 ##remmber to replace nil refernces with colour once you've implemented whole board
 module Stepable
 

@@ -100,8 +100,14 @@ class Board
 
     end
 
-    def find_king(color)
-
+    def find_king(colour)
+        rows.each_with_index do |row,i|
+            row.each_with_index do |tile,j|
+                if tile.symbol == "K" && tile.colour == colour
+                    return [i,j]
+                end
+            end
+        end
     end
 
     def pieces
@@ -120,3 +126,7 @@ class Board
     private
     attr_reader :sentinel
 end
+
+a = Board.new
+p a.find_king(:white)
+p a.find_king(:black)
