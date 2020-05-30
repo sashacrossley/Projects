@@ -226,13 +226,13 @@ class Pawn < Piece
         "P"
     end
 
-    def move_dirs
+    def moves
         forward_steps + side_attacks
     end
 
     def at_start_row?
         board[pos].pos[0] == 
-        if colour == :white
+        if colour == :black
             1 
         else
             6
@@ -242,7 +242,7 @@ class Pawn < Piece
     private
 
     def forward_dir
-        if colour == :white
+        if colour == :black
             1
         else
             -1
