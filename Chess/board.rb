@@ -74,14 +74,30 @@ class Board
         @rows[row][col] = val
     end
 
-    def move_piece(start_pos, end_pos)
-        raise "no piece" if self[start_pos].nil?
-        raise "invalid pos" if !valid_pos?(end_pos)
+    def move_piece(check_colour, start_pos, end_pos)
+        raise "no piece" if empty?(start_pos)
 
         piece = self[start_pos]
-        self[end_pos] = piece
-        self[start_pos] = nil
+        if piece.colour != check_colour
+            raise "move your own piece"
+        elsif !piece.moves.include?(end_pos)
+            raise "can't move there"
+        elsif !piece.valid_moves.include?(end_pos)
+            raise "check!"
+        end
 
+        move_piece!(start_pos, end_pos)
+    end
+
+    def move_piece!(start_pos, end_pos)
+
+        piece = self[start_pos]
+        #raise "can't move there" unless piece.moves.include?(end_pos)
+        self[end_pos] = piece
+        self[start_pos] = NullPiece.instance
+        piece.pos = end_pos
+
+        nil
     end
 
     def valid_pos?(pos)
@@ -95,7 +111,7 @@ class Board
     def checkmate?(colour)
         return false unless in_check?(colour)
 
-        colour_pieces = pieces.select {|piece| piece.colour = colour}
+        colour_pieces = pieces.select {|piece| piece.colour == colour}
         
         colour_pieces.all? do |piece|
             piece.valid_moves.empty?
@@ -105,7 +121,7 @@ class Board
 
     def in_check?(colour)
         pieces.any? do |piece|
-            piece.colour != colour && piece.moves.include?(find_king(:colour))
+            piece.colour != colour && piece.moves.include?(find_king(colour))
         end
     end
 
@@ -124,12 +140,14 @@ class Board
     end
 
     def dup
-
+        new_board = Board.new
+        pieces.each do |piece|
+            piece.class.new(piece.colour, new_board, piece.pos)
+        end
+        new_board
     end
 
-    def move_piece!(color, start_pos, end_pos)
 
-    end
 
 
     private
@@ -137,5 +155,16 @@ class Board
 end
 
 # a = Board.new
+# a.move_piece!([6,5], [5,5])
+# a.move_piece!([1,4], [3,4])
+# a.move_piece!([6,6], [4,6])
+# a.move_piece!([0,3], [4,7])
+# p a[[4,7]].symbol
+# p a[[4,7]].colour != :white && a[[4,7]].moves.include?(a.find_king(:white))
+# # p a[[4,7]].moves.include?([7,4]))
+# p a.in_check?(:white)
+# p a[[7,4]].valid_moves
+# p a.checkmate?(:white)
+# a.move_piece!([6,3], [5,3])
 # p a.in_check?(:white)
 # p a.checkmate?(:white)

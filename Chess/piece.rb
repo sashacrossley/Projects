@@ -10,6 +10,8 @@ module Stepable
             pos = [x + dx, y + dy]
             if board.valid_pos?(pos) && board[pos].colour != colour #board[pos].nil?
                 moves << pos
+            elsif board.valid_pos?(pos) && board[pos].empty?
+                moves << pos
             end
         end
         moves
@@ -88,7 +90,7 @@ attr_accessor :pos
         @board = board
         @pos = pos
 
-        # board.add_piece(self, pos)
+        board.add_piece(self, pos)
     end
 
     def to_s
@@ -100,12 +102,12 @@ attr_accessor :pos
     end
 
     def valid_moves
-        moves
+        moves.reject {|end_pos| move_into_check?(end_pos)}
     end
 
-    def pos=(val)
+    # def pos=(val)
 
-    end
+    # end
 
     def symbol
         # subclass implements this with unicode chess char
@@ -115,7 +117,9 @@ attr_accessor :pos
     private
 
     def move_into_check?(end_pos)
-
+        new_board = board.dup
+        new_board.move_piece!(pos, end_pos)
+        new_board.in_check?(colour)
     end
 
 end
