@@ -75,7 +75,7 @@ class Board
     end
 
     def move_piece(check_colour, start_pos, end_pos)
-        raise "no piece" if empty?(start_pos)
+        raise "no piece" if self[start_pos].empty?
 
         piece = self[start_pos]
         if piece.colour != check_colour
