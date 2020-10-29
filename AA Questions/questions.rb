@@ -56,6 +56,11 @@ class Users
     def authored_replies
         Replies.find_by_user_id(id)
     end
+
+    def followed_questions
+        QuestionFollows.followed_questions_for_user_id(id)
+    end
+
 end
 
 class Questions
@@ -102,6 +107,10 @@ class Questions
         Replies.find_by_question_id(id)
     end
 
+    def followers
+        QuestionFollows.followers_for_question_id(id)
+    end
+
 
 end
 
@@ -125,6 +134,38 @@ class QuestionFollows
         SQL
         ids.map {|id| QuestionFollows.new(id)}
     end
+
+    def self.followers_for_question_id(question_id)
+        follows_data = QuestionDBConnection.instance.execute(<<-SQL, question_id)
+            SELECT
+                users.*
+            FROM
+                users
+            JOIN
+                question_follows ON users.id = question_follows.author_id
+            WHERE
+                question_follows.question_id = ?
+        SQL
+        follows_data.map {|follow| Users.new(follow)}
+    end
+
+    def self.followed_questions_for_user_id(user_id)
+        questions_data = QuestionDBConnection.instance.execute(<<-SQL, user_id)
+            SELECT
+                questions.*
+            FROM
+                questions
+            JOIN
+                question_follows
+            ON
+                questions.id = question_follows.question_id
+            WHERE
+                question_follows.author_id = ?
+        SQL
+        questions_data.map {|questions| Questions.new(questions)}
+    end
+
+
 end
 
 class Replies
