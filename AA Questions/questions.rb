@@ -24,6 +24,27 @@ class Users
         @lname = options['lname']
     end
 
+    def save
+        if self.id
+            QuestionDBConnection.instance.execute(<<-SQL, self.fname, self.lname, self.id)
+                UPDATE
+                    users
+                SET
+                    fname = ?, lname = ?
+                WHERE
+                    id = ?
+            SQL
+        else
+            QuestionDBConnection.instance.execute(<<-SQL, self.fname, self.lname)
+                INSERT INTO
+                    users (fname, lname)
+                VALUES
+                    (?, ?)
+            SQL
+            self.id = QuestionDBConnection.instance.last_insert_row_id
+        end
+    end
+
     def self.find_by_id(id)
         ids = QuestionDBConnection.instance.execute(<<-SQL, id)
             SELECT
