@@ -61,6 +61,46 @@ class Users
         QuestionFollows.followed_questions_for_user_id(id)
     end
 
+    def liked_questions
+        QuestionLikes.liked_questions_for_user_id(id)
+    end
+
+    def average_karma
+        QuestionDBConnection.instance.get_first_value(<<-SQL, self.id)
+        SELECT
+            CAST(COUNT(question_likes.id) AS FLOAT) /
+            COUNT(DISTINCT(questions.id)) AS avg_karma
+        FROM
+            questions
+        LEFT OUTER JOIN
+            question_likes
+        ON
+            questions.id = question_likes.question_id
+        WHERE
+            questions.author_id = ?
+        SQL
+    end
+    
+    
+    def subquery_average_karma
+        QuestionDBConnection.instance.get_first_value(<<-SQL, self.id)
+            SELECT
+                AVG(likes) AS avg_karma
+            FROM (
+                SELECT
+                    COUNT(question_likes.author_id) AS likes
+                FROM
+                    questions
+                LEFT OUTER JOIN
+                    question_likes ON questions.id = question_likes.question_id
+                WHERE
+                    questions.author_id = ?
+                GROUP BY
+                    questions.id
+            )
+        SQL
+    end
+
 end
 
 class Questions
@@ -103,6 +143,14 @@ class Questions
         ids.map {|id| Questions.new(id)}
     end
 
+    def self.most_followed(n)
+        QuestionFollows.most_followed_questions(n)
+    end
+
+    def self.most_liked(n)
+        QuestionLikes.most_liked_questions(n)
+    end
+    
     def replies
         Replies.find_by_question_id(id)
     end
@@ -111,7 +159,13 @@ class Questions
         QuestionFollows.followers_for_question_id(id)
     end
 
+    def likers
+        QuestionLikes.likers_for_question_id(id)
+    end
 
+    def num_likes
+        QuestionLikes.num_likes_for_question_id(id)
+    end
 end
 
 class QuestionFollows
@@ -161,6 +215,26 @@ class QuestionFollows
                 questions.id = question_follows.question_id
             WHERE
                 question_follows.author_id = ?
+        SQL
+        questions_data.map {|questions| Questions.new(questions)}
+    end
+
+    def self.most_followed_questions(n)
+        questions_data = QuestionDBConnection.instance.execute(<<-SQL, n)
+            SELECT
+            questions.*
+            FROM
+                questions
+            JOIN
+                question_follows
+            ON
+                questions.id = question_follows.question_id
+            GROUP BY
+                questions.id
+            ORDER BY
+                COUNT(*) DESC
+            LIMIT
+                ?
         SQL
         questions_data.map {|questions| Questions.new(questions)}
     end
@@ -268,5 +342,69 @@ class QuestionLikes
                 id = ?
         SQL
         ids.map {|id| QuestionLikes.new(id)}
+    end
+
+    def self.likers_for_question_id(question_id)
+        authors = QuestionDBConnection.instance.execute(<<-SQL, question_id)
+            SELECT
+                users.*
+            FROM
+                users
+            JOIN
+                question_likes
+            ON
+                users.id = question_likes.author_id
+            WHERE
+                question_id = ?
+        SQL
+        authors.map {|author| Users.new(author)}
+    end
+
+    def self.num_likes_for_question_id(question_id)
+        ids = QuestionDBConnection.instance.get_first_value(<<-SQL, question_id)
+            SELECT
+                COUNT(*)
+            FROM
+                question_likes
+            WHERE
+                question_id = ?
+        SQL
+    end
+
+    def self.liked_questions_for_user_id(user_id)
+        questions = QuestionDBConnection.instance.execute(<<-SQL, user_id)
+            SELECT
+                questions.*
+            FROM
+                questions
+            JOIN
+                question_likes
+            ON
+                questions.id = question_likes.question_id
+            WHERE
+                question_likes.author_id = ?
+        SQL
+        questions.map {|question|Questions.new(question)}
+    end
+
+    def self.most_liked_questions(n)
+        questions = QuestionDBConnection.instance.execute(<<-SQL, limit: n)
+            SELECT
+                questions.*
+            FROM
+                questions
+            JOIN
+                question_likes
+            ON
+                questions.id = question_likes.question_id
+            GROUP BY
+                questions.id
+            ORDER BY
+                COUNT(*) DESC
+            LIMIT
+                :limit
+        SQL
+        
+        questions.map{|question| Questions.new(question)}
     end
 end
