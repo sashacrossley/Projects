@@ -34,5 +34,31 @@ belongs_to(
     foreign_key: :submitter_id,
     primary_key: :id
 )
+# Now write visitors and visited_urls associations on ShortenedUrl and User. These associations will have to traverse associations in Visit.
 
+has_many(
+    :visits,
+    class_name: 'Visit',
+    foreign_key: :shortened_url_id,
+    primary_key: :id
+)
+
+
+has_many :visitors,
+-> {distinct}, 
+through: :visits,
+source: :visitor
+
+# ShortenedUrl#num_clicks should count the number of clicks on a ShortenedUrl.
+def num_clicks
+    visits.count
+end
+
+def num_uniques
+    visitors.count
+end
+
+def num_recent_uniques
+    visitors.where('visits.created_at > ?', 10.minutes.ago).count
+end
 end
