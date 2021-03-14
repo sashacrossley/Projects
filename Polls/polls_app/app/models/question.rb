@@ -10,7 +10,7 @@ class Question < ApplicationRecord
         :answer_choices,
         class_name: 'AnswerChoice',
         foreign_key: :question_id,
-        primary: :id
+        primary_key: :id
     )
 
 end
