@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+    validates :username, uniqueness: true, presence: true
     has_many(
         :authored_polls, 
         class_name: 'Poll',

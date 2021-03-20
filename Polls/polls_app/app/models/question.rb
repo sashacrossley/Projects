@@ -1,4 +1,6 @@
 class Question < ApplicationRecord
+    validates :text, presence: true
+    
     belongs_to(
         :poll,
         class_name: 'Poll',
