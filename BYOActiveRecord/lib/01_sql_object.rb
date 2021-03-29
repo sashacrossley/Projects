@@ -55,6 +55,11 @@ class SQLObject
 
   def initialize(params = {})
     # ...
+    params.each do |key, value|
+      key_symbol = key.to_sym
+      raise "unknown attribute '#{key}'" if self.class.columns.none? {|column| column == key_symbol}
+      self.send("#{key}=", value)
+    end
   end
 
   def attributes
