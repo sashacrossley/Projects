@@ -12,6 +12,8 @@ span, article, footer, time, small {
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
+    color: inherit;
+    text-decoration: inherit;
 
 }
 
