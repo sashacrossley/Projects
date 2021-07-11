@@ -32,12 +32,16 @@ body {
     padding: 10px 20px;
 }
 
-.header a:hover{
-    background-color: black;
+.header-logo:hover {
+    background: black;
 }
 
 .header-list {
     display: flex;
+}
+
+.header-list > li:hover{
+    background: black;
 }
 
 .header-list > li {
